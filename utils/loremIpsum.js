@@ -15,23 +15,28 @@ const pluckRandomWord = () => {
 const generateRandomWords = (num, wordsPerSentence = { min: 6, max: 16 }) => {
     const { min, max } = wordsPerSentence;
     const length = num > 0 ? num : generateRandomInteger(min, max);
-    return Array.from(Array(length)).map(_ => pluckRandomWord()).join(' ');
+    return Array.from(Array(length))
+        .map(_ => pluckRandomWord())
+        .join(' ');
 };
 
-const generateRandomSentence = num => {
-    return `${capitalize(generateRandomWords(num))}.`;
+const generateRandomSentence = (shouldCapitalize, num) => {
+    return `${shouldCapitalize ? capitalize(generateRandomWords(num)) : generateRandomWords(num)}.`;
 };
 
-const generateRandomSentences = (num, wordsPerSentence = { min: 6, max: 16 }) => {
+const generateRandomSentences = (num, startWithLorem, wordsPerSentence = { min: 6, max: 16 }) => {
     const { min, max } = wordsPerSentence;
     const length = num > 0 ? num : generateRandomInteger(min, max);
-    return Array.from(Array(length)).map(_ => generateRandomSentence()).join(' ').trim();
+    return Array.from(Array(length))
+        .map((_, i) => `${i === 0 && startWithLorem ? 'Lorem ipsum ' : ''}${generateRandomSentence(!(i === 0 && startWithLorem))}`)
+        .join(' ')
+        .trim();
 };
 
-const generateRandomParagraphs = (num, sentencesPerParagraph = { min: 4, max: 8 }) => {
+const generateRandomParagraphs = (num, startWithLorem, sentencesPerParagraph = { min: 4, max: 8 }) => {
     const { min, max } = sentencesPerParagraph;
     const length = num > 0 ? num : generateRandomInteger(min, max);
-    return Array.from(Array(length)).map(_ => generateRandomSentences());
+    return Array.from(Array(length)).map((_, i) => generateRandomSentences(generateRandomInteger(min, max), i === 0 && startWithLorem));
 };
 
 module.exports = {
