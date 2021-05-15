@@ -1,10 +1,12 @@
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { getLoremIpsum } = require('./controllers/LoremController.js');
+const { getLoremIpsum } = require('./controllers/LoremController');
 
 const app = express();
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const PORT = process.env.PORT || 3030;
 

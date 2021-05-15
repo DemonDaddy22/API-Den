@@ -1,4 +1,4 @@
-const { generateLoremIpsum } = require('../services/LoremIpsum.js');
+const { generateLoremIpsum } = require('../helpers/LoremIpsum');
 
 const getLoremIpsum = (req, res, next) => {
     const { q, count, startWithLorem = false } = req.query;
