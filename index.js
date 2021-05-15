@@ -10,4 +10,8 @@ const PORT = process.env.PORT || 3030;
 
 app.listen(PORT, () => console.log(`> Serving on port ${PORT}`));
 
+app.get('/', (req, res) => res.send(`You're in the wrong place xD`));
+
 app.get('/api/v1/lorem/', getLoremIpsum);
+
+app.get('*', (req, res) => res.redirect('/'));
