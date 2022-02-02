@@ -10,7 +10,6 @@ const getGitHubUser = async (code) => {
         const params = new URLSearchParams(githubToken);
         const accessToken = params.get('access_token');
 
-        // TODO - set access token in request
         if (!accessToken) {
             const err = new GitHubError('No access token found');
             throw err;
@@ -20,7 +19,10 @@ const getGitHubUser = async (code) => {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
         const userData = userResponse.data;
-        return userData;
+        return {
+            userData,
+            accessToken,
+        };
     } catch (err) {
         return err;
     }
