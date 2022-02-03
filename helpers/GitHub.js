@@ -18,9 +18,9 @@ const getGitHubUser = async (code) => {
         const userResponse = await axios.get(GITHUB_USER_URL, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
-        const userData = userResponse.data;
+        const user = userResponse.data;
         return {
-            userData,
+            user,
             accessToken,
         };
     } catch (err) {
