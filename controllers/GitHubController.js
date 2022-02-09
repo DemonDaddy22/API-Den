@@ -1,8 +1,9 @@
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const { differenceBy, intersectionBy } = require('lodash');
 const { FOGIT_USER_COOKIE, FOGIT_TOKEN_COOKIE, COOKIE_MAX_AGE } = require('../constants/constants');
 const GitHubError = require('../errors/GitHubError');
-const { getGitHubUser } = require('../helpers/GitHub');
+const { getGitHubUser, getUserFollowers, getUserFollowing } = require('../helpers/GitHub');
 
 const getUserProfile = (req, res, next) => {
     const cookie = req.cookies?.[FOGIT_USER_COOKIE];
@@ -43,14 +44,28 @@ const getUserData = async (req, res, next) => {
             throw error;
         }
 
-        const { followers = 0, following = 0 } = userData;
-        // TODO - create util to get list of followers and following
-        /*
-        const supporters = differenceBy(followers.data, following.data, 'id');
-        const leaders = differenceBy(following.data, followers.data, 'id');
-        const mutual = intersectionBy(followers.data, following.data, 'id');
-        */
-        next();
+        const {
+            followers = 0,
+            following = 0,
+            login,
+        } = userData;
+
+        const followersList = await getUserFollowers(login, followers, tokenData);
+        const followingList = await getUserFollowing(login, following, tokenData);
+
+        const supporters = differenceBy(followersList, followingList, 'id');
+        const leaders = differenceBy(followingList, followersList, 'id');
+        const mutual = intersectionBy(followersList, followingList, 'id');
+
+        res.status(200).send({
+            status: true,
+            error: null,
+            data: {
+                supporters,
+                leaders,
+                mutual,
+            }
+        });
     } catch (err) {
         next(err);
     }
