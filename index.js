@@ -9,15 +9,18 @@ const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { getLoremIpsum } = require('./controllers/LoremController');
-const { getFogitGitHubAuthCode, getUserData, getUserProfile } = require('./controllers/GitHubController');
+const { getFogitGitHubAuthCode, getUserData, getUserProfile, verifyAuthenticatedUser } = require('./controllers/GitHubController');
 const { isUserAuthenticated } = require('./middleware/GitHubMiddleware');
 const asyncErrorHandler = require('./utils/asyncErrorHandler');
+
+// TODO - set cookie in express session
 
 const app = express();
 app.use(cookieParser());
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200
 }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -28,6 +31,8 @@ const PORT = process.env.PORT || 3030;
 app.listen(PORT, () => console.log(`> Serving on port ${PORT}`));
 
 app.get('/api/v1/lorem/', asyncErrorHandler(getLoremIpsum));
+
+app.get('/api/v1/fogit/authenticate', verifyAuthenticatedUser);
 
 app.get('/api/v1/fogit/user/profile', asyncErrorHandler(getUserProfile));
 

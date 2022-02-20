@@ -5,10 +5,24 @@ const { FOGIT_USER_COOKIE, FOGIT_TOKEN_COOKIE, COOKIE_MAX_AGE } = require('../co
 const GitHubError = require('../errors/GitHubError');
 const { getGitHubUser, getUserFollowers, getUserFollowing } = require('../helpers/GitHub');
 
-const getUserProfile = (req, res, next) => {
-    const cookie = req.cookies?.[FOGIT_USER_COOKIE];
-
+const verifyAuthenticatedUser = async (req, res, next) => {
     try {
+        const cookie = req.cookies?.[FOGIT_USER_COOKIE];
+        const userData = jwt.verify(cookie, process.env.SECRET);
+
+        res.status(200).send({
+            status: true,
+            error: null,
+            data: !!userData?.login,
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+const getUserProfile = (req, res, next) => {
+    try {
+        const cookie = req.cookies?.[FOGIT_USER_COOKIE];
         const userData = jwt.verify(cookie, process.env.SECRET);
 
         if (!userData) {
@@ -71,6 +85,14 @@ const getUserData = async (req, res, next) => {
     }
 };
 
+// TODO - Create an API to follow a supporter
+    // - check if user is authenticated
+    // - if status code is 204, return true, else return false
+
+// TODO - Create an API to unfollow a leader or a mutual friend
+    // - check if user is authenticated
+    // - if status code is 204, return true, else return false
+
 const getFogitGitHubAuthCode = async (req, res, next) => {
     try {
         const { code } = req.query || {};
@@ -113,6 +135,7 @@ const getFogitGitHubAuthCode = async (req, res, next) => {
 };
 
 module.exports = {
+    verifyAuthenticatedUser,
     getUserProfile,
     getUserData,
     getFogitGitHubAuthCode,
