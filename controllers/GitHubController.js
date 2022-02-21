@@ -30,7 +30,6 @@ const getUserProfile = (req, res, next) => {
             throw error;
         }
 
-        // TODO - set user data in app context
         res.status(200).send({
             status: true,
             error: null,
@@ -46,10 +45,10 @@ const getUserProfile = (req, res, next) => {
 };
 
 const getUserData = async (req, res, next) => {
-    const cookie = req.cookies?.[FOGIT_USER_COOKIE];
-    const token = req.cookies?.[FOGIT_TOKEN_COOKIE];
-
     try {
+        const cookie = req.cookies?.[FOGIT_USER_COOKIE];
+        const token = req.cookies?.[FOGIT_TOKEN_COOKIE];
+
         const userData = jwt.verify(cookie, process.env.SECRET);
         const tokenData = jwt.verify(token, process.env.SECRET);
 

@@ -36,7 +36,7 @@ app.get('/api/v1/fogit/authenticate', verifyAuthenticatedUser);
 
 app.get('/api/v1/fogit/user/profile', asyncErrorHandler(getUserProfile));
 
-app.get('/api/v1/fogit/user/data', isUserAuthenticated, asyncErrorHandler(getUserData));
+app.get('/api/v1/fogit/user/data', asyncErrorHandler(getUserData));
 
 app.get('/api/v1/fogit/auth/github', asyncErrorHandler(getFogitGitHubAuthCode));
 
