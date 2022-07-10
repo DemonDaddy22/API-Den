@@ -32,7 +32,7 @@ app.listen(PORT, () => console.log(`> Serving on port ${PORT}`));
 
 app.get('/api/v1/lorem/', asyncErrorHandler(getLoremIpsum));
 
-app.get('/api/v1/fogit/authenticate', verifyAuthenticatedUser);
+app.get('/api/v1/fogit/authenticate', asyncErrorHandler(verifyAuthenticatedUser));
 
 app.get('/api/v1/fogit/user/profile', asyncErrorHandler(getUserProfile));
 
@@ -44,7 +44,7 @@ app.get('/', (req, res) => res.send(`You're in the wrong place xD`));
 
 app.get('*', (req, res) => res.redirect('/'));
 
-// Error middleware
+// Error handling middleware
 app.use((err, req, res, next) => {
     let { status = 500, message = 'Internal Server Error', name = 'ServerError' } = err;
     res.status(status).send({
