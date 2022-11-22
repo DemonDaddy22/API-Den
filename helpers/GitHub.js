@@ -1,10 +1,12 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
-const axios = require('axios');
-const { GITHUB_AUTH_URL, GITHUB_USER_URL, GITHUB_USERS_URL, GITHUB_PAGE_SIZE } = require('../constants/constants');
-const GitHubError = require('../errors/GithubError');
-const createListOfSize = require('../utils/createListOfSize');
+import dotenv from 'dotenv';
+dotenv.config();
 
-const getGitHubUser = async (code) => {
+import axios from 'axios';
+import { GITHUB_AUTH_URL, GITHUB_USER_URL, GITHUB_USERS_URL, GITHUB_PAGE_SIZE } from '../constants/constants';
+import GitHubError from '../errors/GithubError';
+import createListOfSize from '../utils/createListOfSize';
+
+export const getGitHubUser = async (code) => {
     try {
         const githubTokenResponse = await axios.post(`${GITHUB_AUTH_URL}?client_id=${process.env.FOGIT_CLIENT_ID}&client_secret=${process.env.FOGIT_CLIENT_SECRET}&code=${code}`);
         const githubToken = githubTokenResponse.data;
@@ -29,7 +31,7 @@ const getGitHubUser = async (code) => {
     }
 };
 
-const getUserFollowers = async (username, followersCount, accessToken) => {
+export const getUserFollowers = async (username, followersCount, accessToken) => {
     const pages = Math.ceil(followersCount / GITHUB_PAGE_SIZE);
     const pageList = createListOfSize(pages);
     try {
@@ -41,14 +43,14 @@ const getUserFollowers = async (username, followersCount, accessToken) => {
                 })
             )
         );
-        
+
         return pagesData?.[0]?.data || [];
     } catch (error) {
         return error;
     }
 };
 
-const getUserFollowing = async (username, followingCount, accessToken) => {
+export const getUserFollowing = async (username, followingCount, accessToken) => {
     const pages = Math.ceil(followingCount / GITHUB_PAGE_SIZE);
     const pageList = createListOfSize(pages);
     try {
@@ -60,15 +62,9 @@ const getUserFollowing = async (username, followingCount, accessToken) => {
                 })
             )
         );
-        
+
         return pagesData?.[0]?.data || [];
     } catch (error) {
         return error;
     }
-};
-
-module.exports = {
-    getGitHubUser,
-    getUserFollowers,
-    getUserFollowing,
 };

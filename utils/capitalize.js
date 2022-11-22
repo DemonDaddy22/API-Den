@@ -7,4 +7,4 @@ const capitalize = str => {
     return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
 };
 
-module.exports = capitalize;
+export default capitalize;

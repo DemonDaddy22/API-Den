@@ -1,11 +1,15 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
-const jwt = require('jsonwebtoken');
-const { differenceBy, intersectionBy } = require('lodash');
-const { FOGIT_USER_COOKIE, FOGIT_TOKEN_COOKIE, COOKIE_MAX_AGE } = require('../constants/constants');
-const GitHubError = require('../errors/GitHubError');
-const { getGitHubUser, getUserFollowers, getUserFollowing } = require('../helpers/GitHub');
+import dotenv from 'dotenv';
+dotenv.config();
 
-const verifyAuthenticatedUser = async (req, res, next) => {
+import jwt from 'jsonwebtoken';
+import pkg from 'lodash';
+import { FOGIT_USER_COOKIE, FOGIT_TOKEN_COOKIE, COOKIE_MAX_AGE } from '../constants/constants';
+import GitHubError from '../errors/GitHubError';
+import { getGitHubUser, getUserFollowers, getUserFollowing } from '../helpers/GitHub';
+
+const { differenceBy, intersectionBy } = pkg;
+
+export const verifyAuthenticatedUser = async (req, res, next) => {
     try {
         const cookie = req.cookies?.[FOGIT_USER_COOKIE];
         const userData = jwt.verify(cookie, process.env.SECRET);
@@ -20,7 +24,7 @@ const verifyAuthenticatedUser = async (req, res, next) => {
     }
 }
 
-const getUserProfile = (req, res, next) => {
+export const getUserProfile = (req, res, next) => {
     try {
         const cookie = req.cookies?.[FOGIT_USER_COOKIE];
         const userData = jwt.verify(cookie, process.env.SECRET);
@@ -44,7 +48,7 @@ const getUserProfile = (req, res, next) => {
     }
 };
 
-const getUserData = async (req, res, next) => {
+export const getUserData = async (req, res, next) => {
     try {
         const cookie = req.cookies?.[FOGIT_USER_COOKIE];
         const token = req.cookies?.[FOGIT_TOKEN_COOKIE];
@@ -92,7 +96,7 @@ const getUserData = async (req, res, next) => {
     // - check if user is authenticated
     // - if status code is 204, return true, else return false
 
-const getFogitGitHubAuthCode = async (req, res, next) => {
+export const getFogitGitHubAuthCode = async (req, res, next) => {
     try {
         const { code } = req.query || {};
 
@@ -131,11 +135,4 @@ const getFogitGitHubAuthCode = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-};
-
-module.exports = {
-    verifyAuthenticatedUser,
-    getUserProfile,
-    getUserData,
-    getFogitGitHubAuthCode,
 };

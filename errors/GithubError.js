@@ -1,8 +1,6 @@
-class GitHubError extends Error {
+export default class GitHubError extends Error {
     constructor(args) {
         super(args);
         this.name = 'GitHubError';
     }
 }
-
-module.exports = GitHubError;

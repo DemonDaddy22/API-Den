@@ -1,18 +1,18 @@
-const WORDS = require('../constants/words');
-const capitalize = require('./capitalize');
+import WORDS from '../constants/words';
+import capitalize from './capitalize';
 
-const generateRandomInteger = (min, max) => {
+export const generateRandomInteger = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-const pluckRandomWord = () => {
+export const pluckRandomWord = () => {
     const min = 0;
     const max = WORDS.length - 1;
     const index = generateRandomInteger(min, max);
     return WORDS[index];
 };
 
-const generateRandomWords = (num, wordsPerSentence = { min: 6, max: 16 }) => {
+export const generateRandomWords = (num, wordsPerSentence = { min: 6, max: 16 }) => {
     const { min, max } = wordsPerSentence;
     const length = num > 0 ? num : generateRandomInteger(min, max);
     return Array.from(Array(length))
@@ -20,11 +20,11 @@ const generateRandomWords = (num, wordsPerSentence = { min: 6, max: 16 }) => {
         .join(' ');
 };
 
-const generateRandomSentence = (shouldCapitalize, num) => {
+export const generateRandomSentence = (shouldCapitalize, num) => {
     return `${shouldCapitalize ? capitalize(generateRandomWords(num)) : generateRandomWords(num)}.`;
 };
 
-const generateRandomSentences = (num, startWithLorem, wordsPerSentence = { min: 6, max: 16 }) => {
+export const generateRandomSentences = (num, startWithLorem, wordsPerSentence = { min: 6, max: 16 }) => {
     const { min, max } = wordsPerSentence;
     const length = num > 0 ? num : generateRandomInteger(min, max);
     return Array.from(Array(length))
@@ -33,16 +33,8 @@ const generateRandomSentences = (num, startWithLorem, wordsPerSentence = { min: 
         .trim();
 };
 
-const generateRandomParagraphs = (num, startWithLorem, sentencesPerParagraph = { min: 4, max: 8 }) => {
+export const generateRandomParagraphs = (num, startWithLorem, sentencesPerParagraph = { min: 4, max: 8 }) => {
     const { min, max } = sentencesPerParagraph;
     const length = num > 0 ? num : generateRandomInteger(min, max);
     return Array.from(Array(length)).map((_, i) => generateRandomSentences(generateRandomInteger(min, max), i === 0 && startWithLorem));
-};
-
-module.exports = {
-    generateRandomInteger,
-    generateRandomParagraphs,
-    generateRandomSentence,
-    generateRandomSentences,
-    generateRandomWords,
 };

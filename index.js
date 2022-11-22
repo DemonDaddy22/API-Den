@@ -3,15 +3,16 @@
 // TODO - add ESLint and Prettier
 // TODO - update APIs
 
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const cookieParser = require('cookie-parser');
-const { getLoremIpsum } = require('./controllers/LoremController');
-const { getFogitGitHubAuthCode, getUserData, getUserProfile, verifyAuthenticatedUser } = require('./controllers/GitHubController');
-const { isUserAuthenticated } = require('./middleware/GitHubMiddleware');
-const asyncErrorHandler = require('./utils/asyncErrorHandler');
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
+import { getLoremIpsum } from './controllers/LoremController';
+import { getFogitGitHubAuthCode, getUserData, getUserProfile, verifyAuthenticatedUser } from './controllers/GitHubController';
+import asyncErrorHandler from './utils/asyncErrorHandler';
 
 // TODO - set cookie in express session
 
@@ -40,9 +41,9 @@ app.get('/api/v1/fogit/user/data', asyncErrorHandler(getUserData));
 
 app.get('/api/v1/fogit/auth/github', asyncErrorHandler(getFogitGitHubAuthCode));
 
-app.get('/', (req, res) => res.send(`You're in the wrong place xD`));
+app.get('/', (_, res) => res.send(`You're in the wrong place xD`));
 
-app.get('*', (req, res) => res.redirect('/'));
+app.get('*', (_, res) => res.redirect('/'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

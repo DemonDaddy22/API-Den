@@ -1,7 +1,7 @@
-const MinCountError = require('../errors/LoremCountError');
-const { generateLoremIpsum } = require('../helpers/LoremIpsum');
+import MinCountError from '../errors/LoremCountError';
+import { generateLoremIpsum } from '../helpers/LoremIpsum';
 
-const getLoremIpsum = (req, res, next) => {
+export const getLoremIpsum = (req, res) => {
     const { q, count, startWithLorem = false } = req.query;
     if (isNaN(count) || count <= 0) {
         const err = new MinCountError('Count must be an integer greater than 0');
@@ -18,5 +18,3 @@ const getLoremIpsum = (req, res, next) => {
         res.status(500).send({ err });
     }
 };
-
-module.exports = { getLoremIpsum };

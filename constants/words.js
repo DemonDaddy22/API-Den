@@ -63,4 +63,4 @@ const WORDS = [
     'voluptate',
 ];
 
-module.exports = WORDS;
+export default WORDS;

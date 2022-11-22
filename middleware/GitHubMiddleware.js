@@ -1,9 +1,11 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
-const jwt = require('jsonwebtoken');
-const { FOGIT_USER_COOKIE, FOGIT_TOKEN_COOKIE } = require("../constants/constants");
-const GitHubError = require('../errors/GitHubError');
+import dotenv from 'dotenv';
+dotenv.config();
 
-const isUserAuthenticated = (req, res, next) => {
+import jwt from 'jsonwebtoken';
+import { FOGIT_USER_COOKIE, FOGIT_TOKEN_COOKIE } from '../constants/constants';
+import GitHubError from '../errors/GitHubError';
+
+export const isUserAuthenticated = (req, res, next) => {
     try {
         const cookie = req.cookies?.[FOGIT_USER_COOKIE];
         const token = req.cookies?.[FOGIT_TOKEN_COOKIE];
@@ -20,7 +22,3 @@ const isUserAuthenticated = (req, res, next) => {
         next(err);
     }
 };
-
-module.exports = {
-    isUserAuthenticated,
-}

@@ -1,6 +1,8 @@
-const { generateRandomWords, generateRandomSentences, generateRandomParagraphs } = require('../utils/loremIpsum');
+import {
+    generateRandomWords, generateRandomSentences, generateRandomParagraphs,
+} from '../utils/loremIpsum';
 
-const generateLoremIpsum = (units, count, startWithLorem) => {
+export const generateLoremIpsum = (units, count, startWithLorem) => {
     switch (units) {
         case 'words':
             return [generateRandomWords(count)];
@@ -11,5 +13,3 @@ const generateLoremIpsum = (units, count, startWithLorem) => {
             return generateRandomParagraphs(count, startWithLorem);
     }
 };
-
-module.exports = { generateLoremIpsum };

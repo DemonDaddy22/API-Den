@@ -9,4 +9,4 @@
 const createListOfSize = (size, start = 1) =>
     size > 0 ? Array.from(Array(size)).map(() => start++) : [];
 
-module.exports = createListOfSize;
+export default createListOfSize;

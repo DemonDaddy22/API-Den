@@ -1,1 +1,3 @@
-module.exports = func => (req, res, next) => func(req, res, next)?.catch(next);
+const asyncErrorHandler = func => (req, res, next) => func(req, res, next)?.catch(next);
+
+export default asyncErrorHandler;
