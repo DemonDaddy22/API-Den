@@ -3,7 +3,7 @@ dotenv.config();
 
 import axios from 'axios';
 import { GITHUB_AUTH_URL, GITHUB_USER_URL, GITHUB_USERS_URL, GITHUB_PAGE_SIZE } from '../constants/constants';
-import GitHubError from '../errors/GithubError';
+import GitHubError from '../errors/GitHubError';
 import createListOfSize from '../utils/createListOfSize';
 
 export const getGitHubUser = async (code) => {
